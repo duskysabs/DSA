@@ -1,95 +1,156 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #define MAX 10
 
 typedef struct{
-   int list[MAX];
-   int count;
-}numList;
+    int elem[MAX];
+    int count;
+}List;
 
-numList initialize(numList);
-numList insertFirst(numList, int);
-numList insertLast(numList , int);
-numList insertPos(numList, int, int);
-numList insertAt(numList , int, int);
-void display(numList);
-
+List initialize(List L);
+List insertPos(List L, int data, int position);
+List deletePos(List L, int position);
+int locate(List L, int data);
+List insertSorted(List L, int data);
+void display(List L);
+void displayMenu();
 
 int main(){
-    numList L;
+    List L;
+    int choice, data, position;
     L = initialize(L);
-    L = insertPos(L, 3, 5);
-    L = insertSort(L, 3)
-    // L =  insertFirst(L, 5);
-    // L =  insertFirst(L, 6);
-    // // L =  insertFirst(L, 7);
-    display(L);
-    // L = insertLast(L, 10);
+    do{
+        displayMenu();
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+;       switch(choice){
+            case 1:
+                printf("Enter number: ");
+                scanf("%d", &data);
+                printf("Enter position: ");
+                scanf("%d", &position);
+                L = insertPos(L, data, position);
+                printf("\n");
+                break;
+            case 2:
+                printf("Enter position: ");
+                scanf("%d", &position);
+                L = deletePos(L, position);
+                printf("\n");
+                break;
+            case 3:
+                printf("Enter what data you want to locate: ");
+                scanf("%d", &data);
+                position =locate(L, data);
+                if(position!=-1){
+                    printf("data has been found at index %d\n\n", position);
+                }
+                else{
+                    printf("data has not been found.\n\n");
+                }
+                break;
+            case 4:
+                printf("Enter data: ");
+                scanf("%d", &data);
+                L = insertSorted(L, data);
+                printf("\n");
+                break;
+            case 5:
+                display(L);
+        }
+    }while(choice<6);
 }
 
-void display(numList L){
+void displayMenu(){
+    printf("Enter your choices:\n");
+    printf("1. insert at position \n");
+    printf("2. delete at position \n");
+    printf("3. locate \n");
+    printf("4. insert sorted \n");
+    printf("5. display \n");
+    printf("6. Exit");
+}
+
+List initialize(List L){
     for(int i=0; i<MAX; i++){
-        printf("%d ", L.list[i]);
-    }
-    printf("\nCount: %d", L.count);
-}
-
-numList initialize(numList L){
-    int i;
-    for(i=0; i<MAX; i++){
-        L.list[i] = -1;    
+        L.elem[i] = -1;
     }
     L.count = 0;
-    
     return L;
 }
-
-numList insertPos(numList L, int value, int pos){
-    if(L.list[pos] != -1){
-        L.list[pos] = value;
+List insertPos(List L, int data, int position){
+    if(L.count == MAX){
+        printf("Array has reached its limit.");
+        return L;
     }
-    else{
-        L.list[pos] = value;
-        L.count++;
+    if(position > L.count && MAX){
+        printf("Enter valid position.\n");
+        return L;
     }
-    return L;
-}
-
-numList insertSorted(numList L, int value){
-    int i, j;
-    int key = 0;
-    
-    for(i=0; i<MAX && L.list[i]!=-1; i++){
-        for(j=0; j<L.count && L.list[j]!=-1; j++){
-            if(value < L.list[i]){
-                key = L.list[i];
-                L.list[i] = value;
-                L.list[i+1]
-            }
+    if(L.elem[position]!=-1){
+        for(int i=L.count; i>position; i--){
+            L.elem[i] = L.elem[i-1];
         }
-    }
-}
-
-
-numList insertFirst(numList L, int value){
-    int i = L.count;
-    if(L.list[0] == -1){
-        L.list[0] = value;
+        L.elem[position] = data;
         L.count++;
         return L;
     }
     else{
-    for(;i!=0; --i){
-        L.list[i] = L.list[i-1];
+        L.elem[position] = data;
+        L.count++;
+        return L;
     }
-    L.list[0] = value;
-    L.count++;
-    return L;
-    }
+    printf("\n");
 }
 
-numList insertLast(numList L, int value){
-    L.list[L.count++] = value;
+List deletePos(List L, int position){
+    if(position > L.count-1){
+        printf("Enter valid position.\n\n");
+        return L;
+    }
+    if(L.count == 0){
+        printf("Nothing to delete.");
+        return L;
+    }
+    for(int i=position; i<L.count-1; i++){
+        L.elem[i] = L.elem[i+1];
+    }
+    L.count--;
     return L;
+    printf("\n");
+}
+
+int locate(List L, int data){
+    for(int i=0; i<L.count; i++){
+        if(L.elem[i] == data){
+            return i;
+        }
+    }
+    return -1;
+}
+
+List insertSorted(List L, int data){
+    int i;
+    if(L.count == MAX){
+        printf("Array has reached its limit.");
+        return L;
+    }
+    for(i=L.count-1; i >= 0 && L.elem[i] > data; i--){
+        L.elem[i+1] = L.elem[i];
+    }
+    L.elem[i+1] = data;
+    L.count++;
+    printf("\n");
+    return L;
+}
+
+void display(List L){
+    printf("\n");
+    for(int i=0; i<L.count; i++){
+        printf("%d ", L.elem[i]);
+    }
+    printf("\nCount: %d\n", L.count);
+    printf("\n\n");
 }
