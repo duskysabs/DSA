@@ -95,7 +95,7 @@ void displayArr(Stack *s){
 }
 
 void display(Stack *s){
-    Stack *temp = initialize(temp);
+    Stack *temp = initialize();
     printf("Data: ");
     while(!isEmpty(s)){
         int value = pop(s);

@@ -99,6 +99,10 @@ void display(Stack *s){
     }
 }
 
+void display(Stack *s){
+
+}
+
 void displayMenu(){
     printf("1.Push\n2.Pop\n3.Peek\n4.Display\n5.Exit\nEnter: ");
 }
