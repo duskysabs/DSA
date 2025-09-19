@@ -91,16 +91,27 @@ int peek(Stack *s){
     }
 }
 
+// void display(Stack *s){
+//     Node* trav = s->top;
+//     while(trav!=NULL){
+//         printf("%d ", trav->data);
+//         trav = trav->next;
+//     }
+// }
+
 void display(Stack *s){
     Node* trav = s->top;
-    while(trav!=NULL){
-        printf("%d ", trav->data);
-        trav = trav->next;
+    Stack *temp = initialize();
+    int data;
+    while(!isEmpty(s)){
+        data = pop(s);
+        printf("data: %d", data);
+        push(temp, data);
     }
-}
 
-void display(Stack *s){
-
+    while(!isEmpty(temp)){
+        push(s, pop(temp));
+    }
 }
 
 void displayMenu(){
